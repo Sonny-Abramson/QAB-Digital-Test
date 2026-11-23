@@ -1,5 +1,5 @@
 // Offline cache for the hosted (https) install. Cache-first for the single-file app.
-const CACHE = "qab-df25543353";
+const CACHE = "qab-0e6e0dd2f9";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => {

@@ -3,6 +3,7 @@ import * as I from "./items.js";
 import * as db from "./db.js";
 
 const root = document.getElementById("app");
+const scroller = document.getElementById("scroller");
 const APP_VERSION = "0.1.0";
 
 // ---------------------------------------------------------------- helpers
@@ -74,17 +75,17 @@ function touch() {
 async function flush() { clearTimeout(saveTimer); if (state.S) { const c = { ...state.S }; delete c._editLogged; await db.saveSession(c); } }
 
 function render() {
-  const y = window.scrollY;
+  const y = scroller.scrollTop;
   document.body.dataset.view = state.view;
   root.replaceChildren(...[
     state.notice ? h("div", { class: "notice" }, state.notice, h("button", { class: "link", onclick: () => { state.notice = null; render(); } }, "dismiss")) : null,
     !state.persistent ? h("div", { class: "notice warn" }, "Browser storage is unavailable. Work is kept in memory only and will be lost when this tab closes. Export often.") : null,
     state.view === "home" ? viewHome() : state.view === "participant" ? viewParticipant() : viewSession(),
   ].filter(Boolean));
-  window.scrollTo(0, y);
+  scroller.scrollTop = y;
 }
 
-function go(view, extra = {}) { Object.assign(state, { view }, extra); window.scrollTo(0, 0); render(); }
+function go(view, extra = {}) { Object.assign(state, { view }, extra); scroller.scrollTop = 0; render(); }
 
 // ---------------------------------------------------------------- timer (persistent, outside render root)
 const timerEl = document.getElementById("timer");
